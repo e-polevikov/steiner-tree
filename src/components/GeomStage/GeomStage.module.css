@@ -1,0 +1,8 @@
+.geom-stage {
+  display: flex;
+}
+
+.stage {
+  border: 2px solid black;
+  margin: 5px;
+}

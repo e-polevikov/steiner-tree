@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+import { GeomStage } from './components/GeomStage/GeomStage';
+
 function App() {
   return (
     <>
-      <h1>Задача «Дерево Штейнера»</h1>
+      <GeomStage />
     </>
   );
 }
