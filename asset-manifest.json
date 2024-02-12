@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/steiner-tree/static/js/main.42bb7591.js",
+    "index.html": "/steiner-tree/index.html",
+    "main.42bb7591.js.map": "/steiner-tree/static/js/main.42bb7591.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.42bb7591.js"
+  ]
+}
