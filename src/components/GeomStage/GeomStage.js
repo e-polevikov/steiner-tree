@@ -28,16 +28,59 @@ function treeReducer(tree, action) {
       return updatedTree;
     }
 
-    updatedTree.segments.push({
-      x1: Math.round(segment.x1 / GRID_INDENT),
-      y1: Math.round(segment.y1 / GRID_INDENT),
-      x2: Math.round(segment.x2 / GRID_INDENT),
-      y2: Math.round(segment.y2 / GRID_INDENT)
-    });
+    for (let i = 0; i < updatedTree.segments.length; i++) {
+      let treeSegment = updatedTree.segments[i];
+
+      if (segment.y1 === segment.y2 && treeSegment.y1 === treeSegment.y2) {
+        if (segment.y1 !== treeSegment.y1) {
+          continue;
+        }
+
+        if (
+          Math.min(segment.x1, segment.x2) <= Math.min(treeSegment.x1, treeSegment.x2) &&
+          Math.max(segment.x1, segment.x2) <= Math.min(treeSegment.x1, treeSegment.x2)
+        ) {
+          continue;
+        }
+
+        if (
+          Math.min(segment.x1, segment.x2) >= Math.max(treeSegment.x1, treeSegment.x2) &&
+          Math.max(segment.x1, segment.x2) >= Math.max(treeSegment.x1, treeSegment.x2)
+        ) {
+          continue;
+        }
+
+        return updatedTree;
+      }
+
+      if (segment.x1 === segment.x2 && treeSegment.x1 === treeSegment.x2) {
+        if (segment.x1 !== treeSegment.x1) {
+          continue;
+        }
+
+        if (
+          Math.min(segment.y1, segment.y2) <= Math.min(treeSegment.y1, treeSegment.y2) &&
+          Math.max(segment.y1, segment.y2) <= Math.min(treeSegment.y1, treeSegment.y2)
+        ) {
+          continue;
+        }
+
+        if (
+          Math.min(segment.y1, segment.y2) >= Math.max(treeSegment.y1, treeSegment.y2) &&
+          Math.max(segment.y1, segment.y2) >= Math.max(treeSegment.y1, treeSegment.y2)
+        ) {
+          continue;
+        }
+
+        return updatedTree;
+      }
+    }
+
+    updatedTree.segments.push(segment);
 
     let newPoint = {
-      x: segment.x1 / GRID_INDENT,
-      y: segment.y1 / GRID_INDENT,
+      x: segment.x1,
+      y: segment.y1,
       predefined: false
     };
 
@@ -109,7 +152,15 @@ export function GeomStage() {
   function handleClick(event) {
     if (!segment.visible) { return; }
 
-    treeDispatch({ type: "ADD_SEGMENT", segment: segment });
+    treeDispatch({
+      type: "ADD_SEGMENT",
+      segment: {
+        x1: Math.round(segment.x1 / GRID_INDENT),
+        y1: Math.round(segment.y1 / GRID_INDENT),
+        x2: Math.round(segment.x2 / GRID_INDENT),
+        y2: Math.round(segment.y2 / GRID_INDENT)
+      }
+    });
     setSegment({...segment, visible: false });
   }
 
