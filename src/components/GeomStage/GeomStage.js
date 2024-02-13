@@ -24,6 +24,10 @@ function treeReducer(tree, action) {
   if (action.type === "ADD_SEGMENT") {
     let segment = action.segment;
 
+    if (segment.x1 === segment.x2 && segment.y1 === segment.y2) {
+      return updatedTree;
+    }
+
     updatedTree.segments.push({
       x1: Math.round(segment.x1 / GRID_INDENT),
       y1: Math.round(segment.y1 / GRID_INDENT),

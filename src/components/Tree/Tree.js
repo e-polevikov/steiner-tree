@@ -32,7 +32,8 @@ export function Tree({ tree, treeDispath, setSegment }) {
             segment.x2 * GRID_INDENT, segment.y2 * GRID_INDENT
           ]}
           stroke={'black'}
-          strokeWidth={7.5}
+          strokeWidth={15.0}
+          opacity={0.5}
           onDblClick={handleDblClick}
         />
       ))}
