@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.3284a4fa.css","mappings":"AAAA,6BACE,YACF,CAEA,wBACE,qBAAuB,CACvB,UACF","sources":["components/GeomStage/GeomStage.module.css"],"sourcesContent":[".geom-stage {\n  display: flex;\n}\n\n.stage {\n  border: 2px solid black;\n  margin: 5px;\n}\n"],"names":[],"sourceRoot":""}
