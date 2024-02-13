@@ -18,6 +18,17 @@ const INITIAL_TREE = {
   segments: [],
 };
 
+function getSegmentsLength(segments) {
+  let totalLength = 0;
+
+  for (let i = 0; i < segments.length; i++) {
+    totalLength += Math.abs(segments[i].x1 - segments[i].x2);
+    totalLength += Math.abs(segments[i].y1 - segments[i].y2);
+  }
+
+  return totalLength;
+}
+
 function treeReducer(tree, action) {
   let updatedTree = JSON.parse(JSON.stringify(tree));
 
@@ -165,28 +176,33 @@ export function GeomStage() {
   }
 
   return (
-    <div className={styles['geom-stage']}>
-      <div className={styles['stage']}>
-        <Stage
-          width={STAGE_WIDTH}
-          height={STAGE_HEIGHT}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}
-        >
-          <Layer>
-            <StageGrid
-              stageWidth={STAGE_WIDTH}
-              stageHeight={STAGE_HEIGHT}
-              gridIndent={GRID_INDENT}
-            />
-            <Segment segment={segment} />
-            <Tree
-              tree={tree}
-              treeDispath={treeDispatch}
-              setSegment={setSegment}
-            />
-          </Layer>
-        </Stage>
+    <div>
+      <div className={styles['geom-stage']}>
+        <div className={styles['stage']}>
+          <Stage
+            width={STAGE_WIDTH}
+            height={STAGE_HEIGHT}
+            onMouseMove={handleMouseMove}
+            onClick={handleClick}
+          >
+            <Layer>
+              <StageGrid
+                stageWidth={STAGE_WIDTH}
+                stageHeight={STAGE_HEIGHT}
+                gridIndent={GRID_INDENT}
+              />
+              <Segment segment={segment} />
+              <Tree
+                tree={tree}
+                treeDispath={treeDispatch}
+                setSegment={setSegment}
+              />
+            </Layer>
+          </Stage>
+        </div>
+      </div>
+      <div>
+        Суммарная длина отрезков: {getSegmentsLength(tree.segments)}
       </div>
     </div>
   );
