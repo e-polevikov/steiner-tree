@@ -1,5 +1,5 @@
 import { useState, useReducer } from 'react';
-import { Stage, Layer, Circle } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 
 import { STAGE_WIDTH, STAGE_HEIGHT, GRID_INDENT } from '../../constants/GeomStage';
 import { StageGrid } from '../StageGrid/StageGrid';
@@ -9,20 +9,72 @@ import { Segment } from '../Segment/Segment';
 import styles from './GeomStage.module.css';
 
 const INITIAL_TREE = {
-  points: [{
-    id: "0", x: 1, y: 1
-  }, {
-    id: "1", x: 5, y: 1
-  }, {
-    id: "2", x: 6, y: 6
-  }, {
-    id: "3", x: 2, y: 7
-  }],
+  points: [
+    {x: 1, y: 1, predefined: true},
+    {x: 5, y: 1, predefined: true},
+    {x: 6, y: 6, predefined: true},
+    {x: 2, y: 7, predefined: true}
+  ],
   segments: [],
 };
 
 function treeReducer(tree, action) {
-  return tree;
+  let updatedTree = JSON.parse(JSON.stringify(tree));
+
+  if (action.type === "ADD_SEGMENT") {
+    let segment = action.segment;
+
+    updatedTree.segments.push({
+      x1: Math.round(segment.x1 / GRID_INDENT),
+      y1: Math.round(segment.y1 / GRID_INDENT),
+      x2: Math.round(segment.x2 / GRID_INDENT),
+      y2: Math.round(segment.y2 / GRID_INDENT)
+    });
+
+    let newPoint = {
+      x: segment.x1 / GRID_INDENT,
+      y: segment.y1 / GRID_INDENT
+    };
+
+    if (!updatedTree.points.some((point) => {
+      return point.x === newPoint.x && point.y === newPoint.y;
+    })) {
+      updatedTree.points.push(newPoint);
+    }
+  }
+
+  if (action.type === "REMOVE_SEGMENT") {
+    let segmentId = action.segmentId;
+    let segment = updatedTree.segments[segmentId];
+
+    updatedTree.points = updatedTree.points.filter((point) => {
+      if (point.predefined) {
+        return true;
+      }
+
+      for (let i = 0; i < updatedTree.segments.length; i++) {
+        if (i === segmentId) {
+          continue;
+        }
+
+        let currSegment = updatedTree.segments[i];
+
+        if (point.x === currSegment.x1 && point.y === currSegment.y1) {
+          return true;
+        }
+
+        if (point.x === currSegment.x2 && point.y === currSegment.y2) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    updatedTree.segments.splice(segmentId, 1);
+  }
+
+  return updatedTree;
 }
 
 export function GeomStage() {
@@ -38,13 +90,22 @@ export function GeomStage() {
     let x = Math.round(pointer.x / GRID_INDENT) * GRID_INDENT;
     let y = Math.round(pointer.y / GRID_INDENT) * GRID_INDENT;
 
+    let xDist = Math.abs(x - segment.x2);
+    let yDist = Math.abs(y - segment.y2);
+
+    if (xDist < yDist) {
+      x = segment.x2;
+    } else {
+      y = segment.y2;
+    }
+
     setSegment({...segment, x1: x, y1: y});
   }
 
   function handleClick(event) {
     if (!segment.visible) { return; }
 
-    treeDispatch({ type: "ADD_SEGMENT", segment: segment});
+    treeDispatch({ type: "ADD_SEGMENT", segment: segment });
     setSegment({...segment, visible: false });
   }
 
@@ -63,8 +124,12 @@ export function GeomStage() {
               stageHeight={STAGE_HEIGHT}
               gridIndent={GRID_INDENT}
             />
-            <Tree tree={tree} setSegment={setSegment} />
             <Segment segment={segment} />
+            <Tree
+              tree={tree}
+              treeDispath={treeDispatch}
+              setSegment={setSegment}
+            />
           </Layer>
         </Stage>
       </div>
