@@ -33,7 +33,8 @@ function treeReducer(tree, action) {
 
     let newPoint = {
       x: segment.x1 / GRID_INDENT,
-      y: segment.y1 / GRID_INDENT
+      y: segment.y1 / GRID_INDENT,
+      predefined: false
     };
 
     if (!updatedTree.points.some((point) => {
@@ -45,7 +46,6 @@ function treeReducer(tree, action) {
 
   if (action.type === "REMOVE_SEGMENT") {
     let segmentId = action.segmentId;
-    let segment = updatedTree.segments[segmentId];
 
     updatedTree.points = updatedTree.points.filter((point) => {
       if (point.predefined) {
