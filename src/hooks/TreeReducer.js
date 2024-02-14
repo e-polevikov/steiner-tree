@@ -1,7 +1,8 @@
 import {
   getLength,
   overlapHorizontally,
-  overlapVertically
+  overlapVertically,
+  intersectPerpendicularly
 } from "../services/Segments";
 
 export function treeReducer(tree, action) {
