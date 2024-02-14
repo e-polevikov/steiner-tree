@@ -9,7 +9,7 @@ import { Tree } from '../Tree/Tree';
 import { Segment } from '../Segment/Segment';
 
 import { treeReducer } from '../../hooks/TreeReducer';
-import { getSegmentsLength } from '../../services/Segments';
+import { getTotalLength } from '../../services/Segments';
 
 import styles from './GeomStage.module.css';
 
@@ -80,7 +80,7 @@ export function GeomStage() {
         </div>
       </div>
       <div>
-        Суммарная длина отрезков: {getSegmentsLength(tree.segments)}
+        Суммарная длина отрезков: {getTotalLength(tree.segments)}
       </div>
     </div>
   );

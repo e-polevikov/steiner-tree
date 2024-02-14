@@ -1,11 +1,78 @@
 
+function horizontal(segment) {
+  return segment.y1 === segment.y2;
+}
 
-export function getSegmentsLength(segments) {
+function vertical(segment) {
+  return segment.x1 === segment.x2
+}
+
+export function overlapHorizontally(segment1, segment2) {
+  if (!(horizontal(segment1) && horizontal(segment2))) {
+    return false;
+  }
+
+  if (segment1.y1 !== segment2.y1) {
+    return false;
+  }
+  
+  if (
+    Math.min(segment1.x1, segment1.x2) <= Math.min(segment2.x1, segment2.x2) &&
+    Math.max(segment1.x1, segment1.x2) <= Math.min(segment2.x1, segment2.x2)
+  ) {
+    return false;
+  }
+
+  if (
+    Math.min(segment1.x1, segment1.x2) >= Math.max(segment2.x1, segment2.x2) &&
+    Math.max(segment1.x1, segment1.x2) >= Math.max(segment2.x1, segment2.x2)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+export function overlapVertically(segment1, segment2) {
+  if (!(vertical(segment1) && vertical(segment2))) {
+    return false;
+  }
+
+  if (segment1.x1 !== segment2.x1) {
+    return false;
+  }
+
+  if (
+    Math.min(segment1.y1, segment1.y2) <= Math.min(segment2.y1, segment2.y2) &&
+    Math.max(segment1.y1, segment1.y2) <= Math.min(segment2.y1, segment2.y2)
+  ) {
+    return false;
+  }
+
+  if (
+    Math.min(segment1.y1, segment1.y2) >= Math.max(segment2.y1, segment2.y2) &&
+    Math.max(segment1.y1, segment1.y2) >= Math.max(segment2.y1, segment2.y2)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+export function getLength(segment) {
+  let length = 0;
+
+  length += Math.abs(segment.x1 - segment.x2);
+  length += Math.abs(segment.y1 - segment.y2);
+
+  return length;
+}
+
+export function getTotalLength(segments) {
   let totalLength = 0;
 
   for (let i = 0; i < segments.length; i++) {
-    totalLength += Math.abs(segments[i].x1 - segments[i].x2);
-    totalLength += Math.abs(segments[i].y1 - segments[i].y2);
+    totalLength += getLength(segments[i]);
   }
 
   return totalLength;
