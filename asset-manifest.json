@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/steiner-tree/static/css/main.3284a4fa.css",
-    "main.js": "/steiner-tree/static/js/main.941f6ff6.js",
+    "main.js": "/steiner-tree/static/js/main.cde34abc.js",
     "index.html": "/steiner-tree/index.html",
     "main.3284a4fa.css.map": "/steiner-tree/static/css/main.3284a4fa.css.map",
-    "main.941f6ff6.js.map": "/steiner-tree/static/js/main.941f6ff6.js.map"
+    "main.cde34abc.js.map": "/steiner-tree/static/js/main.cde34abc.js.map"
   },
   "entrypoints": [
     "static/css/main.3284a4fa.css",
-    "static/js/main.941f6ff6.js"
+    "static/js/main.cde34abc.js"
   ]
 }
