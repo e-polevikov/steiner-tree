@@ -39,18 +39,30 @@ export function GeomStage() {
   }
 
   function handleClick(event) {
-    if (!segment.visible) { return; }
+    if (!segment.visible) { 
+      const stage = event.target.getStage();
+      const pointer = stage.getPointerPosition();
+  
+      let x = Math.round(pointer.x / GRID_INDENT);
+      let y = Math.round(pointer.y / GRID_INDENT);
 
-    treeDispatch({
-      type: "ADD_SEGMENT",
-      segment: {
-        x1: Math.round(segment.x1 / GRID_INDENT),
-        y1: Math.round(segment.y1 / GRID_INDENT),
-        x2: Math.round(segment.x2 / GRID_INDENT),
-        y2: Math.round(segment.y2 / GRID_INDENT)
-      }
-    });
-    setSegment({...segment, visible: false });
+      treeDispatch({
+        type: "ADD_POINT",
+        point: {x: x, y: y}
+      });
+    } else {
+      treeDispatch({
+        type: "ADD_SEGMENT",
+        segment: {
+          x1: Math.round(segment.x1 / GRID_INDENT),
+          y1: Math.round(segment.y1 / GRID_INDENT),
+          x2: Math.round(segment.x2 / GRID_INDENT),
+          y2: Math.round(segment.y2 / GRID_INDENT)
+        }
+      });
+
+      setSegment({...segment, visible: false });
+    }
   }
 
   return (
@@ -80,8 +92,8 @@ export function GeomStage() {
         </div>
       </div>
       <div>
-        <p>Суммарная длина отрезков: {getTotalLength(tree.segments)}</p>
         <p>Точки соединены: {connected(tree) ? "Да" : "Нет"}</p>
+        <p>Суммарная длина отрезков: {getTotalLength(tree.segments)}</p>
       </div>
     </div>
   );

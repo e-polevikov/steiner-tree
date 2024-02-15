@@ -1,7 +1,8 @@
 import {
   getLength,
   overlapHorizontally,
-  overlapVertically
+  overlapVertically,
+  insideSegment
 } from "../services/Segments";
 
 export function treeReducer(tree, action) {
@@ -55,7 +56,7 @@ export function treeReducer(tree, action) {
         }
 
         let currSegment = updatedTree.segments[i];
-
+        
         if (point.x === currSegment.x1 && point.y === currSegment.y1) {
           return true;
         }
@@ -69,6 +70,28 @@ export function treeReducer(tree, action) {
     });
 
     updatedTree.segments.splice(segmentId, 1);
+  }
+
+  if (action.type === "ADD_POINT") {
+    let newPoint = action.point;
+
+    if (updatedTree.points.some((point) => {
+      return point.x === newPoint.x && point.y === newPoint.y;
+    })) {
+      return updatedTree;
+    }
+
+    for (let i = 0; i < updatedTree.segments.length; i++) {
+      let currSegment = updatedTree.segments[i];
+
+      if (insideSegment(newPoint, currSegment)) {
+        return updatedTree;
+      }
+    }
+
+    updatedTree.points.push(newPoint);
+
+    return updatedTree;
   }
 
   return updatedTree;
