@@ -2,7 +2,9 @@ import {
   getLength,
   overlapHorizontally,
   overlapVertically,
-  insideSegment
+  insideSegment,
+  horizontal,
+  vertical
 } from "../services/Segments";
 
 export function treeReducer(tree, action) {
@@ -40,6 +42,8 @@ export function treeReducer(tree, action) {
     })) {
       updatedTree.points.push(newPoint);
     }
+
+    return updatedTree;
   }
 
   if (action.type === "REMOVE_SEGMENT") {
@@ -51,18 +55,36 @@ export function treeReducer(tree, action) {
       }
 
       for (let i = 0; i < updatedTree.segments.length; i++) {
-        if (i === segmentId) {
-          continue;
-        }
-
         let currSegment = updatedTree.segments[i];
-        
-        if (point.x === currSegment.x1 && point.y === currSegment.y1) {
-          return true;
-        }
 
-        if (point.x === currSegment.x2 && point.y === currSegment.y2) {
-          return true;
+        if (i === segmentId) {
+          if (!insideSegment(point, currSegment)) {
+            return true;
+          }
+
+          if (
+            horizontal(currSegment) &&
+            point.x > Math.min(currSegment.x1, currSegment.x2) &&
+            point.x < Math.max(currSegment.x1, currSegment.x2)
+          ) {
+            return true;
+          }
+
+          if (
+            vertical(currSegment) &&
+            point.y > Math.min(currSegment.y1, currSegment.y2) &&
+            point.y < Math.max(currSegment.y1, currSegment.y2)
+          ) {
+            return true;
+          }
+        } else {
+          if (point.x === currSegment.x1 && point.y === currSegment.y1) {
+            return true;
+          }
+
+          if (point.x === currSegment.x2 && point.y === currSegment.y2) {
+            return true;
+          }
         }
       }
 
@@ -70,10 +92,16 @@ export function treeReducer(tree, action) {
     });
 
     updatedTree.segments.splice(segmentId, 1);
+
+    return updatedTree;
   }
 
   if (action.type === "ADD_POINT") {
-    let newPoint = action.point;
+    let newPoint = {
+      x: action.point.x,
+      y: action.point.y,
+      predefined: false
+    };
 
     if (updatedTree.points.some((point) => {
       return point.x === newPoint.x && point.y === newPoint.y;

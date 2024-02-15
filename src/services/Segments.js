@@ -1,10 +1,10 @@
 import * as disjointSet from 'disjoint-set';
 
-function horizontal(segment) {
+export function horizontal(segment) {
   return segment.y1 === segment.y2;
 }
 
-function vertical(segment) {
+export function vertical(segment) {
   return segment.x1 === segment.x2
 }
 
