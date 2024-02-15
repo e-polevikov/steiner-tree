@@ -3,7 +3,7 @@ import { Circle, Line } from 'react-konva';
 import { GRID_INDENT } from "../../constants/GeomStage";
 
 export function Tree({ tree, treeDispath, setSegment }) {
-  function handleClick(event) {
+  function handleCircleClick(event) {
     let x = event.target.x();
     let y = event.target.y();
 
@@ -14,7 +14,14 @@ export function Tree({ tree, treeDispath, setSegment }) {
     });
   }
 
-  function handleDblClick(event) {
+  function handleCircleDblClick(event) {
+    treeDispath({
+      type: "REMOVE_POINT",
+      pointId: Number(event.target.id())
+    });
+  }
+
+  function handleLineDblClick(event) {
     treeDispath({
       type: "REMOVE_SEGMENT",
       segmentId: Number(event.target.id())
@@ -34,7 +41,7 @@ export function Tree({ tree, treeDispath, setSegment }) {
           stroke={'black'}
           strokeWidth={15.0}
           opacity={0.5}
-          onDblClick={handleDblClick}
+          onDblClick={handleLineDblClick}
         />
       ))}
       {tree.points.map((point, pointId) => (
@@ -45,7 +52,8 @@ export function Tree({ tree, treeDispath, setSegment }) {
           y={point.y * GRID_INDENT}
           radius={GRID_INDENT / 4}
           fill={point.predefined ? 'green' : 'black'}
-          onClick={handleClick}
+          onClick={handleCircleClick}
+          onDblClick={handleCircleDblClick}
         />
       ))}
     </>
