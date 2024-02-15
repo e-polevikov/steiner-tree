@@ -115,6 +115,47 @@ function removePoint(tree, pointId) {
   if (point.predefined) {
     return;
   }
+
+  let segmentsToRemove = [];
+  let pointsToRemove = [{x: point.x, y: point.y}];
+
+  for (let i = 0; i < tree.segments.length; i++) {
+    let segment = tree.segments[i];
+
+    if (point.x === segment.x1 && point.y === segment.y1) {
+      segmentsToRemove.push(i);
+      pointsToRemove.push({x: segment.x2, y: segment.y2});
+    }
+
+    if (point.x === segment.x2 && point.y === segment.y2) {
+      segmentsToRemove.push(i);
+      pointsToRemove.push({x: segment.x1, y: segment.y1});
+    }
+  }
+
+  tree.points = tree.points.filter((point) => {
+    if (point.predefined) {
+      return true;
+    }
+
+    for (let i = 0; i < pointsToRemove.length; i++) {
+      if (point.x === pointsToRemove[i].x && point.y === pointsToRemove[i].y) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  tree.segments = tree.segments.filter((segment, segmentId) => {
+    for (let j = 0; j < segmentsToRemove.length; j++) {
+      if (segmentId === segmentsToRemove[j]) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 }
 
 export function treeReducer(tree, action) {
