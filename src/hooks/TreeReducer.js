@@ -83,6 +83,18 @@ function addSegment(tree, segment) {
   })) {
     tree.points.push(newPoint);
   }
+
+  newPoint = {
+    x: segment.x2,
+    y: segment.y2,
+    predefined: false
+  };
+
+  if (!tree.points.some((point) => {
+    return point.x === newPoint.x && point.y === newPoint.y;
+  })) {
+    tree.points.push(newPoint);
+  }
 }
 
 function addPoint(tree, point) {
@@ -121,15 +133,37 @@ function removePoint(tree, pointId) {
 
   for (let i = 0; i < tree.segments.length; i++) {
     let segment = tree.segments[i];
+    let pointToRemove;
 
     if (point.x === segment.x1 && point.y === segment.y1) {
       segmentsToRemove.push(i);
-      pointsToRemove.push({x: segment.x2, y: segment.y2});
+      pointToRemove = {x: segment.x2, y: segment.y2};
     }
 
     if (point.x === segment.x2 && point.y === segment.y2) {
       segmentsToRemove.push(i);
-      pointsToRemove.push({x: segment.x1, y: segment.y1});
+      pointToRemove = {x: segment.x1, y: segment.y1};
+    }
+
+    if (!pointToRemove) {
+      continue
+    }
+
+    let pointCtr = 0;
+    for (let i = 0; i < tree.segments.length; i++) {
+      segment = tree.segments[i];
+
+      if (pointToRemove.x === segment.x1 && pointToRemove.y === segment.y1) {
+        pointCtr += 1;
+      }
+
+      if (pointToRemove.x === segment.x2 && pointToRemove.y === segment.y2) {
+        pointCtr += 1;
+      }
+    }
+
+    if (pointCtr === 1) {
+      pointsToRemove.push(pointToRemove);
     }
   }
 
