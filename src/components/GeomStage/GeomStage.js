@@ -2,7 +2,6 @@ import { useState, useReducer } from 'react';
 import { Stage, Layer } from 'react-konva';
 
 import { STAGE_WIDTH, STAGE_HEIGHT, GRID_INDENT } from '../../constants/GeomStage';
-import { INITIAL_TREE } from '../../constants/Level1';
 
 import { StageGrid } from '../StageGrid/StageGrid';
 import { Tree } from '../Tree/Tree';
@@ -13,8 +12,8 @@ import { getTotalLength, connected } from '../../services/Segments';
 
 import styles from './GeomStage.module.css';
 
-export function GeomStage() {
-  const [tree, treeDispatch] = useReducer(treeReducer, INITIAL_TREE);
+export function GeomStage({ initialTree }) {
+  const [tree, treeDispatch] = useReducer(treeReducer, initialTree);
   const [segment, setSegment] = useState({ visible: false });
 
   function handleMouseMove(event) {
