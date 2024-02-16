@@ -1,6 +1,6 @@
 export const GRID_SIZE = {
-  WIDTH: 24,
-  HEIGHT: 10
+  WIDTH: 18,
+  HEIGHT: 8
 };
 
 export const STAGE_WIDTH = window.innerWidth * 0.95;
