@@ -1,8 +1,6 @@
 import { useState, useReducer } from 'react';
 import { Stage, Layer } from 'react-konva';
 
-import { STAGE_WIDTH, STAGE_HEIGHT, GRID_INDENT } from '../../constants/GeomStage';
-
 import { StageGrid } from '../StageGrid/StageGrid';
 import { Tree } from '../Tree/Tree';
 import { Segment } from '../Segment/Segment';
@@ -12,8 +10,12 @@ import { getTotalLength, connected } from '../../services/Segments';
 
 import styles from './GeomStage.module.css';
 
-export function GeomStage({ initialTree }) {
-  const [tree, treeDispatch] = useReducer(treeReducer, initialTree);
+export function GeomStage({ settings }) {
+  const STAGE_WIDTH = window.innerWidth * 0.95;
+  const GRID_INDENT = STAGE_WIDTH / settings.gridSize.width;
+  const STAGE_HEIGHT = GRID_INDENT * settings.gridSize.height;
+
+  const [tree, treeDispatch] = useReducer(treeReducer, settings.initialTree);
   const [segment, setSegment] = useState({ visible: false });
 
   function handleMouseMove(event) {
@@ -80,11 +82,12 @@ export function GeomStage({ initialTree }) {
                 stageHeight={STAGE_HEIGHT}
                 gridIndent={GRID_INDENT}
               />
-              <Segment segment={segment} />
+              <Segment segment={segment} gridIndent={GRID_INDENT} />
               <Tree
                 tree={tree}
                 treeDispath={treeDispatch}
                 setSegment={setSegment}
+                gridIndent={GRID_INDENT}
               />
             </Layer>
           </Stage>

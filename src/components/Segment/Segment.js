@@ -1,8 +1,6 @@
 import { Line, Circle } from 'react-konva';
 
-import { GRID_INDENT } from '../../constants/GeomStage';
-
-export function Segment({ segment }) {
+export function Segment({ segment, gridIndent }) {
   if (!segment.visible) {
     return (
       <></>
@@ -14,13 +12,13 @@ export function Segment({ segment }) {
       <Circle
         x={segment.x1}
         y={segment.y1}
-        radius={GRID_INDENT / 6}
+        radius={gridIndent / 6}
         fill={'black'}
       />
       <Circle
         x={segment.x2}
         y={segment.y2}
-        radius={GRID_INDENT / 6}
+        radius={gridIndent / 6}
         fill={'black'}
       />
       <Line

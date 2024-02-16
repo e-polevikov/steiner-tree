@@ -1,8 +1,6 @@
 import { Circle, Line } from 'react-konva';
 
-import { GRID_INDENT } from "../../constants/GeomStage";
-
-export function Tree({ tree, treeDispath, setSegment }) {
+export function Tree({ tree, treeDispath, setSegment, gridIndent }) {
   function handleCircleClick(event) {
     let x = event.target.x();
     let y = event.target.y();
@@ -35,8 +33,8 @@ export function Tree({ tree, treeDispath, setSegment }) {
           id={String(segmentId)}
           key={String(segmentId)}
           points={[
-            segment.x1 * GRID_INDENT, segment.y1 * GRID_INDENT,
-            segment.x2 * GRID_INDENT, segment.y2 * GRID_INDENT
+            segment.x1 * gridIndent, segment.y1 * gridIndent,
+            segment.x2 * gridIndent, segment.y2 * gridIndent
           ]}
           stroke={'black'}
           strokeWidth={15.0}
@@ -48,9 +46,9 @@ export function Tree({ tree, treeDispath, setSegment }) {
         <Circle
           id={String(pointId)}
           key={String(pointId)}
-          x={point.x * GRID_INDENT}
-          y={point.y * GRID_INDENT}
-          radius={GRID_INDENT / 4}
+          x={point.x * gridIndent}
+          y={point.y * gridIndent}
+          radius={gridIndent / 4}
           fill={point.predefined ? 'green' : 'black'}
           onClick={handleCircleClick}
           onDblClick={handleCircleDblClick}

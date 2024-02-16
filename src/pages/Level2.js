@@ -1,10 +1,10 @@
-import { LEVEL2_TREE } from '../constants/Levels';
+import { LEVEL2_SETTINGS } from '../constants/Levels';
 import { GeomStage } from '../components/GeomStage/GeomStage';
 
 export function Level2() {
   return (
     <>
-      <GeomStage initialTree={LEVEL2_TREE} />
+      <GeomStage settings={LEVEL2_SETTINGS} />
     </>
   );
 }
